@@ -1,0 +1,21 @@
+filebeat.inputs:
+- type: filestream
+  id: my-filestream-id
+  paths:
+    - /var/log/*.log
+  processors:
+  - decode_json_fields:
+      fields: ["message"]
+      process_array: false
+      max_depth: 5
+      target: ""
+      overwrite_keys: true
+      add_error_key: false
+
+# output.logstash:
+#   hosts: ["logstash:5044"]
+
+output.elasticsearch:
+  hosts: '${ELASTICSEARCH_HOSTS:elasticsearch:9200}'
+  username: '${ELASTICSEARCH_USERNAME:elastic}'
+  password: '${ELASTICSEARCH_PASSWORD:changeme}'
